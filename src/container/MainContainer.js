@@ -1,38 +1,44 @@
 import React from 'react';
 import CreateCard from '../components/CreateCard';
 import ToDoCardContainer from'./ToDoCardContainer'
+import axios from 'axios';
+//import fetch from 'node-fetch'
+
 
 class MainContainer extends React.Component{
 
 
     state={
         cards:[],
+        lists:[]
     }
 
     createNewCard=(input)=>{
 
-        fetch('http://localhost:3000/cards',{
+        fetch('http://localhost:3001/cards',{
             method:'POST',
             headers:{
                 'Content-type':'application/json',
-                Accept:'application/json'
-
             },
             body:JSON.stringify({
                 title:input
             })
         })
-            .then(resp=>resp.json())
-            .then(newCard=>{
+            .then(res=>(res.json()))
+             .then(newCard=>{
                 this.setState({
                     cards:[...this.state.cards,newCard]
                 })
-            })
+            }).catch(e=>{
+                console.log(e)
+        })
+
+
     }
 
 
     addList=(cardID,input)=>{
-        fetch('http://localhost:3000//lists',{
+        fetch('http://localhost:3001/cards/lists',{
             method:'POST',
             headers:{
 
@@ -67,7 +73,7 @@ class MainContainer extends React.Component{
 
     componentDidMount() {
 
-        fetch('http://localhost:3000/cards')
+        fetch('http://localhost:3001/cards')
             .then(resp=>resp.json())
             .then(cards=>{
                 this.setState({
@@ -78,7 +84,6 @@ class MainContainer extends React.Component{
     }
 
     handleClickList =(cardID,listID)=>{
-
 
         const foundCard = {...this.state.cards.find(card=>card.id==cardID)}
         const foundList = foundCard.lists.find(list=>list.id==listID)
@@ -91,7 +96,7 @@ class MainContainer extends React.Component{
             newState=true;
         }
 
-        fetch(`http://localhost:3000/lists/${listID}`,{
+        fetch(`http://localhost:3001/cards/lists/${listID}`,{
             method:"PATCH",
             headers:{
                 'Content-type':'application/json',
@@ -128,16 +133,19 @@ class MainContainer extends React.Component{
 
     }
 
+
+
     render() {
         return(
             <div className="main-container">
-                <ToDoCardContainer cards={this.state.cards}/>
-                <CreateCard createNewCard ={this.createNewCard}/>
+                    <ToDoCardContainer cards={this.state.cards} addList={this.addList} handleClickList={this.handleClickList}/>
+                    <CreateCard createNewCard ={this.createNewCard}/>
             </div>
         )
     }
 
 
 }
+
 
 export default MainContainer;

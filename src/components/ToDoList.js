@@ -9,9 +9,8 @@ const ToDoList = (props)=>{
 
 
    return(
-       <div onClick={handleClick} className={"to-do-list"}>
-         <h3>{props.list.description}</h3>
-
+       <div onClick={handleClick} className={"to-do-list-container"}>
+         <h3 className={props.list.completed ? "completed-list":"to-do-list"}>{props.list.description}</h3>
        </div>
    )
 

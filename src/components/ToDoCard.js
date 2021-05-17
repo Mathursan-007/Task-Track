@@ -7,8 +7,6 @@ class ToDoCard extends React.Component{
         input:''
     }
 
-
-
     handleListInput=(event)=>{
         this.setState({
             input:event.target.value
@@ -25,7 +23,8 @@ class ToDoCard extends React.Component{
 
     renderLists(){
         return this.props.card.lists.map(list=>{
-            return <ToDoList key={list.id} list={list}/>
+           // alert(list.id)
+            return <ToDoList card_ID={this.props.card.id} key={list.id} list={list} handleClickList={this.props.handleClickList}/>
         })
     }
 
@@ -42,5 +41,5 @@ class ToDoCard extends React.Component{
     }
 
 }
-
+//
 export default ToDoCard;
